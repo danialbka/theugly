@@ -1,0 +1,7 @@
+node_modules/
+.output/
+dist/
+.tanstack/
+.codex/
+.DS_Store
+*.log
