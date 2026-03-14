@@ -1,40 +1,54 @@
-# The Ugly: TanStack Start + Ruffle
+# The Ugly
 
-## Stack
+This project is a TanStack Start site that embeds the archived Flash version of **The Ugly** in a modern browser through Ruffle.
+
+## Credits
+
+- Original Flash game: **Aran**
+- Modern web wrapper: TanStack Start + Ruffle integration by this repo
+
+## Overview
+
+The app keeps the original Flash game intact and serves it inside a minimal web page:
+
+- `public/THE_UGLY.swf` contains the archived game file
+- `public/ruffle/` contains the self-hosted Ruffle runtime
+- `src/routes/index.tsx` mounts the Flash movie in the center of the page
+
+## Tech
 
 - TanStack Start
-- TanStack Router file-based routes
+- TanStack Router
 - React
 - Vite
 - TypeScript
 - Ruffle
 
-## Run locally
+## Local development
 
 ```bash
 npm install
 npm run dev
 ```
 
-Then open `http://localhost:3000`.
+Open `http://localhost:3000`.
 
-To build and run the production server:
+To build and run production locally:
 
 ```bash
 npm run build
 npm run start
 ```
 
-## What it does
+## Live site
 
-This app now embeds the archived original Flash movie instead of a reverse-engineered remake.
-
-- `public/THE_UGLY.swf` is the local game binary
-- `public/ruffle/` contains the Ruffle runtime files used by the client
-- `src/routes/index.tsx` loads Ruffle on the client and mounts the SWF into the page
+- GitHub: [danialbka/theugly](https://github.com/danialbka/theugly)
+- Vercel: [theugly.vercel.app](https://theugly.vercel.app)
 
 ## Notes
 
-- The archived SWF used here is Flash version 7 content.
+- The project embeds the archived original Flash release rather than a remake.
+- The archived SWF is Flash Player 7 era content.
 - Runtime behavior depends on current Ruffle AVM1 compatibility.
-- The embedded movie contains horror material and graphic content.
+- The game contains horror and graphic material.
+- Original creator credit is based on public listings for the Flash release.
