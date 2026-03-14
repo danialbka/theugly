@@ -5,3 +5,4 @@ dist/
 .codex/
 .DS_Store
 *.log
+.vercel
