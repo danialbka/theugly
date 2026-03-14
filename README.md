@@ -4,7 +4,7 @@ This project is a TanStack Start site that embeds the archived Flash version of 
 
 ## Credits
 
-- Original Flash game: **Aran**
+- Original Flash game: **Juliano Reina** (`jreinalab`)
 - Modern web wrapper: TanStack Start + Ruffle integration by this repo
 
 ## Overview
@@ -51,4 +51,4 @@ npm run start
 - The archived SWF is Flash Player 7 era content.
 - Runtime behavior depends on current Ruffle AVM1 compatibility.
 - The game contains horror and graphic material.
-- Original creator credit is based on public listings for the Flash release.
+- Original creator credit is based on the Newgrounds release page and `jreinalab` author profile.
