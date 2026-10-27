@@ -10,8 +10,8 @@
   },
   "dependencies": {
     "@ruffle-rs/ruffle": "^0.2.0-nightly.2026.3.13",
-    "@tanstack/react-router": "^1.166.8",
-    "@tanstack/react-start": "^1.166.9",
+    "@tanstack/react-router": "^1.170.46",
+    "@tanstack/react-start": "^1.169.4",
     "@vitejs/plugin-react": "^6.0.1",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
