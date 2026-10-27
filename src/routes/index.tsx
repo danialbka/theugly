@@ -1,152 +1,45 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useRef, useState } from "react";
+import { GameStage } from "../components/GameStage";
+import {
+  PLAYER_HEIGHT,
+  PLAYER_URL,
+  PLAYER_WIDTH,
+  POSTER_URL,
+  SITE_URL,
+} from "../site";
 
-const SWF_PATH = "/THE_UGLY.swf";
-const RUFFLE_SCRIPT_PATH = "/ruffle/ruffle.js";
-
-type PlayerStatus = "loading" | "ready" | "error";
-
-type RufflePlayerHandle = HTMLElement & {
-  ruffle: () => {
-    load: (movie: string) => Promise<unknown> | unknown;
-  };
-};
-
-type RuffleFactory = {
-  createPlayer: () => RufflePlayerHandle;
-};
-
-declare global {
-  interface Window {
-    RufflePlayer?: {
-      newest?: () => RuffleFactory;
-      config?: Record<string, unknown>;
-    };
-  }
-}
-
-let ruffleScriptPromise: Promise<void> | null = null;
+const CARD_TITLE = "THE UGLY";
+const CARD_DESCRIPTION =
+  "Play the original Flash horror game right here. Click to start.";
 
 export const Route = createFileRoute("/")({
+  // X player card: a tweet linking here plays /embed inline in the timeline.
+  head: () => ({
+    meta: [
+      { name: "twitter:card", content: "player" },
+      { name: "twitter:title", content: CARD_TITLE },
+      { name: "twitter:description", content: CARD_DESCRIPTION },
+      { name: "twitter:image", content: POSTER_URL },
+      { name: "twitter:player", content: PLAYER_URL },
+      { name: "twitter:player:width", content: String(PLAYER_WIDTH) },
+      { name: "twitter:player:height", content: String(PLAYER_HEIGHT) },
+      { property: "og:type", content: "website" },
+      { property: "og:title", content: CARD_TITLE },
+      { property: "og:description", content: CARD_DESCRIPTION },
+      { property: "og:image", content: POSTER_URL },
+      { property: "og:url", content: `${SITE_URL}/` },
+    ],
+  }),
   component: Home,
 });
 
 function Home() {
-  const hostRef = useRef<HTMLDivElement | null>(null);
-  const [status, setStatus] = useState<PlayerStatus>("loading");
-  const [errorText, setErrorText] = useState("");
-
-  useEffect(() => {
-    let cancelled = false;
-
-    async function mountPlayer() {
-      try {
-        setStatus("loading");
-        setErrorText("");
-
-        await ensureRuffleLoaded();
-        if (cancelled || !hostRef.current || !window.RufflePlayer?.newest) {
-          return;
-        }
-
-        hostRef.current.innerHTML = "";
-
-        const player = window.RufflePlayer.newest().createPlayer();
-        player.style.width = "100%";
-        player.style.height = "100%";
-        player.style.display = "block";
-
-        hostRef.current.appendChild(player);
-        await player.ruffle().load(SWF_PATH);
-
-        if (!cancelled) {
-          setStatus("ready");
-        }
-      } catch (error) {
-        if (!cancelled) {
-          setStatus("error");
-          setErrorText(
-            error instanceof Error ? error.message : "Ruffle failed to load the movie.",
-          );
-        }
-      }
-    }
-
-    mountPlayer();
-
-    return () => {
-      cancelled = true;
-      if (hostRef.current) {
-        hostRef.current.innerHTML = "";
-      }
-    };
-  }, []);
-
   return (
     <main className="page-shell">
       <h1 className="page-title">THE UGLY</h1>
       <div className="stage-shell">
-        <div className="stage-frame">
-          <div ref={hostRef} className="ruffle-host" />
-          {status === "loading" ? (
-            <div className="overlay-message">Loading…</div>
-          ) : null}
-          {status === "error" ? (
-            <div className="overlay-message overlay-message--error">
-              <p>Could not load the game.</p>
-              <p>{errorText}</p>
-              <p>
-                <a href={SWF_PATH}>Open the SWF</a>
-              </p>
-            </div>
-          ) : null}
-        </div>
+        <GameStage />
       </div>
     </main>
   );
-}
-
-function ensureRuffleLoaded() {
-  if (typeof window === "undefined") {
-    return Promise.resolve();
-  }
-
-  if (window.RufflePlayer?.newest) {
-    return Promise.resolve();
-  }
-
-  if (ruffleScriptPromise) {
-    return ruffleScriptPromise;
-  }
-
-  ruffleScriptPromise = new Promise<void>((resolve, reject) => {
-    window.RufflePlayer = window.RufflePlayer ?? {};
-
-    const existingScript = document.querySelector<HTMLScriptElement>(
-      `script[src="${RUFFLE_SCRIPT_PATH}"]`,
-    );
-
-    if (existingScript) {
-      existingScript.addEventListener("load", () => resolve(), { once: true });
-      existingScript.addEventListener(
-        "error",
-        () => reject(new Error("Ruffle script failed to load.")),
-        { once: true },
-      );
-      return;
-    }
-
-    const script = document.createElement("script");
-    script.src = RUFFLE_SCRIPT_PATH;
-    script.async = true;
-    script.addEventListener("load", () => resolve(), { once: true });
-    script.addEventListener(
-      "error",
-      () => reject(new Error("Ruffle script failed to load.")),
-      { once: true },
-    );
-    document.head.appendChild(script);
-  });
-
-  return ruffleScriptPromise;
 }

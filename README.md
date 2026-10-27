@@ -45,6 +45,17 @@ npm run start
 - GitHub: [danialbka/theugly](https://github.com/danialbka/theugly)
 - Vercel: [theugly.vercel.app](https://theugly.vercel.app)
 
+## Play inside a tweet (X player card)
+
+Tweet `https://theugly.vercel.app/` and the game plays right in the timeline, so nobody has to leave X.
+
+- `/` serves the `twitter:card=player` tags, which point X at `/embed`
+- `/embed` is just the game, filling X's 640x480 iframe
+- `public/x-poster.png` (1200x900) is the preview image shown before someone clicks play
+- `vite.config.ts` lets X frame `/embed` (`frame-ancestors`) and sends CORS headers on the game files, because X's sandboxed iframe may load the page with an opaque origin
+
+X caches a card the first time it sees a URL. If you change the tags after tweeting, tweet `https://theugly.vercel.app/?v=2` to get a fresh card.
+
 ## Notes
 
 - The project embeds the archived original Flash release rather than a remake.

@@ -85,3 +85,18 @@ body {
 .overlay-message--error {
   max-width: min(80%, 420px);
 }
+
+/* Player card page: fills X's iframe (640x480 on desktop) with no scrolling. */
+.embed-shell {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: #000000;
+}
+
+.embed-shell .stage-frame {
+  width: min(100vw, calc(100vh * 4 / 3));
+  box-shadow: none;
+}
